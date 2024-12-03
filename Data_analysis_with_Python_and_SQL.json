@@ -1,0 +1,1957 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_GRAFANA-POSTGRESQL-DATASOURCE-2",
+      "label": "grafana-postgresql-datasource-2",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "grafana-postgresql-datasource",
+      "pluginName": "PostgreSQL"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "panel",
+      "id": "barchart",
+      "name": "Bar chart",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "bargauge",
+      "name": "Bar gauge",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "gauge",
+      "name": "Gauge",
+      "version": ""
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "11.2.2"
+    },
+    {
+      "type": "datasource",
+      "id": "grafana-postgresql-datasource",
+      "name": "PostgreSQL",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "piechart",
+      "name": "Pie chart",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Business Questions:\nQuestion 1: Revenue per quarter\nQuestion 2: Number of orders per month\nQuestion 3: Unique customers per month\nQuestion 4: Revenue and orders over time\nQuestion 5: Number of orders by country per quarter\nQuestion 6: Value of orders over time\nQuestion 7: Best selling products\nQuestion 8: Top three all-time products\nQuestion 9: Number of orders by category per quarter\nQuestion 10: Total orders by category\n",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+      },
+      "description": "Question 6: Value of orders over time",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 5,
+        "x": 0,
+        "y": 0
+      },
+      "id": 13,
+      "options": {
+        "displayMode": "basic",
+        "maxVizHeight": 300,
+        "minVizHeight": 16,
+        "minVizWidth": 8,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [],
+          "fields": "",
+          "values": true
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "text": {},
+        "valueMode": "color"
+      },
+      "pluginVersion": "11.2.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT to_char(order_date, 'YYYY\"-\"mm') AS month, SUM(price * quantity) AS value \nFROM orders AS o \nINNER JOIN orders_details AS od ON o.order_id = od.order_id \nINNER JOIN products AS p ON od.product_id = p.product_id \nINNER JOIN categories AS c ON p.category_id = c.category_id \nGROUP BY month \nORDER BY month",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Value of orders over time",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+      },
+      "description": "Question 9: Numbers of orders by category per quarter",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 200
+              },
+              {
+                "color": "#6ED0E0",
+                "value": 400
+              },
+              {
+                "color": "#EF843C",
+                "value": 600
+              },
+              {
+                "color": "#E24D42",
+                "value": 800
+              },
+              {
+                "color": "#1F78C1",
+                "value": 1000
+              },
+              {
+                "color": "#BA43A9",
+                "value": 1200
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byValue",
+              "options": {
+                "op": "gte",
+                "reducer": "range",
+                "value": 10
+              }
+            },
+            "properties": [
+              {
+                "id": "filterable"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 5,
+        "y": 0
+      },
+      "id": 7,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": true,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.2.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "CREATE EXTENSION IF NOT EXISTS tablefunc;\nDROP VIEW IF EXISTS myview;\nCREATE TEMP VIEW myview AS \n    SELECT to_char(order_date, 'YYYY\"Q\"Q') as quarter, \n    CASE \n        WHEN category_name ~* '(/| )' THEN regexp_replace(category_name, '/| ', '', 'g') \n        ELSE category_name \nEND AS category_name , SUM(quantity) AS num_of_orders \nFROM orders AS o \nINNER JOIN orders_details AS od ON o.order_id = od.order_id \nINNER JOIN products AS p ON od.product_id = p.product_id \nINNER JOIN categories AS c ON p.category_id = c.category_id \nGROUP BY quarter, category_name \nORDER BY quarter ASC, num_of_orders DESC;\n\nSELECT quarter\n     , COALESCE(Beverages, 0) AS \"Beverages\"\n     , COALESCE(DairyProducts, 0) AS \"Dairy_Products\"\n     , COALESCE(Confections, 0) AS \"Confections\"\n     , COALESCE(Condiments, 0) AS \"Condiments\" \n     , COALESCE(Seafood, 0) AS \"Seafood\"\n     , COALESCE(Produce, 0) AS \"Produce\" \n     , COALESCE(GrainsCereals, 0) AS \"Grains/Cereals\" \n     , COALESCE(MeatPoultry, 0) AS \"Meat/Poultry\" \nFROM crosstab('SELECT quarter, category_name, num_of_orders \nFROM myview',  \n$$VALUES ('Beverages'::text), ('DairyProducts'), ('Confections'), ('Seafood'), ('Condiments'), ('Produce'), ('GrainsCereals'), ('MeatPoultry')$$    \n) \nAS ct (quarter text, Beverages numeric, DairyProducts numeric, Confections numeric, \nSeafood numeric, Condiments numeric, Produce numeric, GrainsCereals numeric, MeatPoultry numeric );",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Number of orders by category per quarter",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+      },
+      "description": "Question 10: Total orders by category",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 70
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 7,
+        "x": 17,
+        "y": 0
+      },
+      "id": 23,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [],
+          "fields": "",
+          "values": true
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "11.2.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT category_name, SUM(quantity) AS num_of_orders \nFROM orders_details AS od \nINNER JOIN products AS p ON od.product_id = p.product_id \nINNER JOIN categories AS c ON p.category_id = c.category_id \nGROUP BY category_name \nORDER BY num_of_orders DESC",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Total orders by category",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+      },
+      "description": "Question 4: Revenue and orders over time",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "series",
+            "axisLabel": "Revenue",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "count_orders"
+            },
+            "properties": [
+              {
+                "id": "custom.drawStyle",
+                "value": "bars"
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 45
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "custom.axisColorMode",
+                "value": "series"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "Number of Orders"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "count_orders"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "id": 25,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT to_char(order_date, 'YYYY\"-\"mm') AS month, SUM(price * quantity) AS revenue, SUM(quantity) AS count_orders \nFROM orders AS o \nINNER JOIN orders_details AS od ON o.order_id = od.order_id \nINNER JOIN products AS p ON od.product_id = p.product_id \nINNER JOIN categories AS c ON p.category_id = c.category_id \nGROUP BY month \nORDER BY month;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Revenue and orders over time",
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "dateFormat": "YYYY-MM",
+                "destinationType": "time",
+                "targetField": "month"
+              }
+            ],
+            "fields": {}
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+      },
+      "description": "Question 2: Number of orders per month\n",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "Number of orders",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "num_of_orders"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "id": 2,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.8,
+        "colorByField": "num_of_orders",
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": false
+        },
+        "orientation": "auto",
+        "showValue": "never",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "month",
+        "xTickLabelRotation": -45,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "11.2.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT to_char(order_date, 'YYYY\"-\"mm') AS month, SUM(quantity) AS num_of_orders\nFROM orders\nINNER JOIN orders_details ON orders.order_id = orders_details.order_id\nGROUP BY month\nORDER BY month",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Number of orders per month",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+      },
+      "description": "Question 3: Unique customers per month",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#F2495C",
+            "mode": "continuous-greens"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "Unique Customers",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 16
+      },
+      "id": 3,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.8,
+        "colorByField": "nunique",
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": false
+        },
+        "orientation": "vertical",
+        "showValue": "always",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "month",
+        "xTickLabelRotation": -45,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "11.2.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "WITH count_distinct AS (SELECT to_char(order_date, 'YYYY\"-\"mm') AS month \nFROM orders GROUP BY month, customer_id)\nSELECT month,count(month) AS nunique FROM count_distinct GROUP BY month \nORDER BY month;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Unique customers per month",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+      },
+      "description": "Question 7: Best selling products",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-BlYlRd"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "hue",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "area"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 50
+              },
+              {
+                "color": "#6ED0E0",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 16
+      },
+      "id": 15,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.92,
+        "colorByField": "best_sale",
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true,
+          "sortBy": "Name",
+          "sortDesc": true
+        },
+        "orientation": "auto",
+        "showValue": "always",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "month",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 100
+      },
+      "pluginVersion": "11.2.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT month, product_name, best_sale \n    FROM (\n        SELECT to_char(order_date, 'YYYY\"-\"mm') AS month, ROW_NUMBER() OVER (PARTITION BY to_char(order_date, 'YYYY\"-\"mm') order by product_name DESC) AS r, product_name, SUM(quantity) AS best_sale \n        FROM orders_details AS od \n        INNER JOIN orders AS o ON o.order_id = od.order_id \n        INNER JOIN products AS p ON od.product_id = p.product_id \n        GROUP BY month, product_name \n        ORDER BY month ASC, best_sale DESC) AS x\nWHERE x.r <= 1;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Best selling products",
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {}
+        }
+      ],
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+      },
+      "description": "Question 5: Number of orders by country per quarter",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "mode": "lcd",
+              "type": "gauge",
+              "valueDisplayMode": "color"
+            },
+            "filterable": false,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 200
+              },
+              {
+                "color": "#6ED0E0",
+                "value": 400
+              },
+              {
+                "color": "#EF843C",
+                "value": 600
+              },
+              {
+                "color": "#E24D42",
+                "value": 800
+              },
+              {
+                "color": "#1F78C1",
+                "value": 1000
+              },
+              {
+                "color": "#BA43A9",
+                "value": 1200
+              },
+              {
+                "color": "#705DA0",
+                "value": 1400
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "quarter"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "auto",
+                  "wrapText": false
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 14,
+        "x": 0,
+        "y": 24
+      },
+      "id": 11,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": true
+        },
+        "frameIndex": 0,
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "11.2.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "CREATE EXTENSION IF NOT EXISTS tablefunc;\nDROP VIEW IF EXISTS myview5;\nCREATE TEMP VIEW myview5 AS \n    SELECT to_char(order_date, 'YYYY\"Q\"Q') as quarter, \n    CASE \n        WHEN country ~* '(/| )' THEN regexp_replace(country, '/| ', '', 'g') \n        ELSE country \nEND AS country , SUM(quantity) AS num_of_orders \nFROM orders AS o \nINNER JOIN orders_details AS od ON o.order_id = od.order_id \nINNER JOIN products AS p ON od.product_id = p.product_id \nINNER JOIN customers AS c ON o.customer_id = c.customer_id \nGROUP BY quarter, country \nORDER BY quarter ASC, num_of_orders DESC;\n\nSELECT quarter\n     , COALESCE(Argentina, 0) AS Argentina\n     , COALESCE(Austria, 0) AS Austria\n     , COALESCE(Belgium, 0) AS Belgium\n     , COALESCE(Brazil, 0) AS Brazil\n     , COALESCE(Canada, 0) AS Canada\n     , COALESCE(Denmark, 0) AS Denmark\n     , COALESCE(Finland, 0) AS Finland\n     , COALESCE(France, 0) AS France\n     , COALESCE(Germany, 0) AS Germany\n     , COALESCE(Ireland, 0) AS Ireland\n     , COALESCE(Italy, 0) AS Italy\n     , COALESCE(Mexico, 0) AS Mexico\n     , COALESCE(Norway, 0) AS Norway\n     , COALESCE(Poland, 0) AS Poland\n     , COALESCE(Portugal, 0) AS Portugal\n     , COALESCE(Spain, 0) AS Spain\n     , COALESCE(Sweden, 0) AS Sweden\n     , COALESCE(Switzerland, 0) AS Switzerland\n     , COALESCE(UK, 0) AS UK\n     , COALESCE(USA, 0) AS USA\n     , COALESCE(Venezuela, 0) AS Venezuela\n    FROM crosstab('SELECT quarter, country, num_of_orders \n    FROM myview5', \n    $$VALUES ('Argentina'::text), ('Austria'), ('Belgium'), ('Brazil'), ('Canada'), \n    ('Denmark'), ('Finland'), ('France'), ('Germany'), ('Ireland'), ('Italy'), \n    ('Mexico'), ('Norway'), ('Poland'), ('Portugal'), ('Spain'), ('Sweden'), \n    ('Switzerland'), ('UK'), ('USA'), ('Venezuela')$$ \n    ) \n    AS ct (quarter text, Argentina numeric, Austria numeric, Belgium numeric, \n    Brazil numeric, Canada numeric, Denmark numeric, Finland numeric, France numeric, \n    Germany numeric, Ireland numeric, Italy numeric, Mexico numeric, Norway numeric, \n    Poland numeric, Portugal numeric, Spain numeric, Sweden numeric, \n    Switzerland numeric, UK numeric, USA numeric, Venezuela numeric );",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Number of orders by country per quarter",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+      },
+      "description": "Question 1: Revenue per quarter",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "Revenue",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "gradientMode": "scheme",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 10,
+        "x": 14,
+        "y": 24
+      },
+      "id": 17,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "right",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.2.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT to_char(order_date, 'YYYY\"Q\"Q') AS quarter, SUM(price * quantity) AS revenue\nFROM orders AS o\nINNER JOIN orders_details AS od ON o.order_id = od.order_id\nINNER JOIN products AS p ON od.product_id = p.product_id\nINNER JOIN categories AS c ON p.category_id = c.category_id\nGROUP BY quarter\nORDER BY quarter",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Revenue per quarter",
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "dateFormat": "YYYY'Q'Q",
+                "destinationType": "time",
+                "targetField": "quarter"
+              }
+            ],
+            "fields": {}
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+      },
+      "description": "Question 6: Value of orders over time",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "fieldMinMax": false,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 4,
+        "x": 0,
+        "y": 31
+      },
+      "id": 14,
+      "options": {
+        "displayMode": "gradient",
+        "maxVizHeight": 300,
+        "minVizHeight": 16,
+        "minVizWidth": 8,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [],
+          "fields": "",
+          "values": true
+        },
+        "showUnfilled": false,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "11.2.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT to_char(order_date, 'YYYY\"-\"mm') AS month, SUM(price * quantity) AS value \nFROM orders AS o \nINNER JOIN orders_details AS od ON o.order_id = od.order_id \nINNER JOIN products AS p ON od.product_id = p.product_id \nINNER JOIN categories AS c ON p.category_id = c.category_id \nGROUP BY month \nORDER BY month",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Value of orders over time",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+      },
+      "description": "Question 9: Number of orders by category per quarter",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 15,
+        "x": 4,
+        "y": 31
+      },
+      "id": 6,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "never",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "11.2.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "CREATE EXTENSION IF NOT EXISTS tablefunc;\nDROP VIEW IF EXISTS myview;\nCREATE TEMP VIEW myview AS \n    SELECT to_char(order_date, 'YYYY\"Q\"Q') as quarter, \n    CASE \n        WHEN category_name ~* '(/| )' THEN regexp_replace(category_name, '/| ', '', 'g') \n        ELSE category_name \nEND AS category_name , SUM(quantity) AS num_of_orders \nFROM orders AS o \nINNER JOIN orders_details AS od ON o.order_id = od.order_id \nINNER JOIN products AS p ON od.product_id = p.product_id \nINNER JOIN categories AS c ON p.category_id = c.category_id \nGROUP BY quarter, category_name \nORDER BY quarter ASC, num_of_orders DESC;\n\nSELECT quarter\n     , COALESCE(Beverages, 0) AS \"Beverages\"\n     , COALESCE(DairyProducts, 0) AS \"Dairy_Products\"\n     , COALESCE(Confections, 0) AS \"Confections\"\n     , COALESCE(Condiments, 0) AS \"Condiments\" \n     , COALESCE(Seafood, 0) AS \"Seafood\"\n     , COALESCE(Produce, 0) AS \"Produce\" \n     , COALESCE(GrainsCereals, 0) AS \"Grains/Cereals\" \n     , COALESCE(MeatPoultry, 0) AS \"Meat/Poultry\" \nFROM crosstab('SELECT quarter, category_name, num_of_orders \nFROM myview',  \n$$VALUES ('Beverages'::text), ('DairyProducts'), ('Confections'), ('Seafood'), ('Condiments'), ('Produce'), ('GrainsCereals'), ('MeatPoultry')$$    \n) \nAS ct (quarter text, Beverages numeric, DairyProducts numeric, Confections numeric, \nSeafood numeric, Condiments numeric, Produce numeric, GrainsCereals numeric, MeatPoultry numeric );",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Number of orders by category per quarter",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+      },
+      "description": "Question 8: Top three all-time products",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "fieldMinMax": false,
+          "mappings": [],
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 5,
+        "x": 19,
+        "y": 31
+      },
+      "id": 16,
+      "options": {
+        "displayLabels": [
+          "name",
+          "value"
+        ],
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "right",
+          "showLegend": false,
+          "values": []
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.2.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT product_name, SUM(quantity) AS best_sale \nFROM orders_details AS od \nINNER JOIN products AS p ON od.product_id = p.product_id \nGROUP BY product_name \nORDER BY best_sale DESC LIMIT 3",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Top three all-time products",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+      },
+      "description": "Question 4: Revenue and orders over time",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": true,
+            "axisCenteredZero": false,
+            "axisColorMode": "series",
+            "axisLabel": "Revenue",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 10,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "num_of_orders"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "Number of Orders"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 15,
+        "x": 4,
+        "y": 39
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.2.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT to_char(order_date, 'YYYY\"-\"mm') AS month, SUM(price * quantity) AS revenue, SUM(quantity) AS num_of_orders\nFROM orders AS o\nINNER JOIN orders_details AS od ON o.order_id = od.order_id\nINNER JOIN products AS p ON od.product_id = p.product_id\nINNER JOIN categories AS c ON p.category_id = c.category_id\nGROUP BY month\nORDER BY month",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Revenue and orders over time",
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "dateFormat": "YYYY-MM",
+                "destinationType": "time",
+                "targetField": "month"
+              }
+            ],
+            "fields": {}
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+      },
+      "description": "Question 10: Total orders by category",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [],
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 5,
+        "x": 19,
+        "y": 39
+      },
+      "id": 24,
+      "options": {
+        "displayLabels": [
+          "percent",
+          "name",
+          "value"
+        ],
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "right",
+          "showLegend": false,
+          "values": []
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.2.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT category_name, SUM(quantity) AS num_of_orders \nFROM orders_details AS od \nINNER JOIN products AS p ON od.product_id = p.product_id \nINNER JOIN categories AS c ON p.category_id = c.category_id \nGROUP BY category_name \nORDER BY num_of_orders DESC",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Total orders by category",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+      },
+      "description": "Question 9: Number of orders by category per quarter",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 70
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 24,
+        "x": 0,
+        "y": 47
+      },
+      "id": 8,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "11.2.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "CREATE EXTENSION IF NOT EXISTS tablefunc;\nDROP VIEW IF EXISTS myview;\nCREATE TEMP VIEW myview AS \n    SELECT to_char(order_date, 'YYYY\"Q\"Q') as quarter, \n    CASE \n        WHEN category_name ~* '(/| )' THEN regexp_replace(category_name, '/| ', '', 'g') \n        ELSE category_name \nEND AS category_name , SUM(quantity) AS num_of_orders \nFROM orders AS o \nINNER JOIN orders_details AS od ON o.order_id = od.order_id \nINNER JOIN products AS p ON od.product_id = p.product_id \nINNER JOIN categories AS c ON p.category_id = c.category_id \nGROUP BY quarter, category_name \nORDER BY quarter ASC, num_of_orders DESC;\n\nSELECT quarter\n     , COALESCE(Beverages, 0) AS \"Beverages\"\n     , COALESCE(DairyProducts, 0) AS \"Dairy_Products\"\n     , COALESCE(Confections, 0) AS \"Confections\"\n     , COALESCE(Condiments, 0) AS \"Condiments\" \n     , COALESCE(Seafood, 0) AS \"Seafood\"\n     , COALESCE(Produce, 0) AS \"Produce\" \n     , COALESCE(GrainsCereals, 0) AS \"Grains/Cereals\" \n     , COALESCE(MeatPoultry, 0) AS \"Meat/Poultry\" \nFROM crosstab('SELECT quarter, category_name, num_of_orders \nFROM myview',  \n$$VALUES ('Beverages'::text), ('DairyProducts'), ('Confections'), ('Seafood'), ('Condiments'), ('Produce'), ('GrainsCereals'), ('MeatPoultry')$$    \n) \nAS ct (quarter text, Beverages numeric, DairyProducts numeric, Confections numeric, \nSeafood numeric, Condiments numeric, Produce numeric, GrainsCereals numeric, MeatPoultry numeric );",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Number of orders by category per quarter",
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "dateFormat": "YYYY'Q'q",
+                "destinationType": "time",
+                "targetField": "quarter"
+              }
+            ],
+            "fields": {}
+          }
+        }
+      ],
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+      },
+      "description": "Question 5: Number of orders by country per quarter",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "color-text",
+              "wrapText": false
+            },
+            "filterable": false,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 200
+              },
+              {
+                "color": "#6ED0E0",
+                "value": 400
+              },
+              {
+                "color": "#EF843C",
+                "value": 600
+              },
+              {
+                "color": "#E24D42",
+                "value": 800
+              },
+              {
+                "color": "#1F78C1",
+                "value": 1000
+              },
+              {
+                "color": "#BA43A9",
+                "value": 1200
+              },
+              {
+                "color": "#705DA0",
+                "value": 1400
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 52
+      },
+      "id": 10,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": true
+        },
+        "frameIndex": 1,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "argentina"
+          }
+        ]
+      },
+      "pluginVersion": "11.2.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "${DS_GRAFANA-POSTGRESQL-DATASOURCE-2}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "CREATE EXTENSION IF NOT EXISTS tablefunc;\nDROP VIEW IF EXISTS myview5;\nCREATE TEMP VIEW myview5 AS \n    SELECT to_char(order_date, 'YYYY\"Q\"Q') as quarter, \n    CASE \n        WHEN country ~* '(/| )' THEN regexp_replace(country, '/| ', '', 'g') \n        ELSE country \nEND AS country , SUM(quantity) AS num_of_orders \nFROM orders AS o \nINNER JOIN orders_details AS od ON o.order_id = od.order_id \nINNER JOIN products AS p ON od.product_id = p.product_id \nINNER JOIN customers AS c ON o.customer_id = c.customer_id \nGROUP BY quarter, country \nORDER BY quarter ASC, num_of_orders DESC;\n\nSELECT quarter\n     , COALESCE(Argentina, 0) AS Argentina\n     , COALESCE(Austria, 0) AS Austria\n     , COALESCE(Belgium, 0) AS Belgium\n     , COALESCE(Brazil, 0) AS Brazil\n     , COALESCE(Canada, 0) AS Canada\n     , COALESCE(Denmark, 0) AS Denmark\n     , COALESCE(Finland, 0) AS Finland\n     , COALESCE(France, 0) AS France\n     , COALESCE(Germany, 0) AS Germany\n     , COALESCE(Ireland, 0) AS Ireland\n     , COALESCE(Italy, 0) AS Italy\n     , COALESCE(Mexico, 0) AS Mexico\n     , COALESCE(Norway, 0) AS Norway\n     , COALESCE(Poland, 0) AS Poland\n     , COALESCE(Portugal, 0) AS Portugal\n     , COALESCE(Spain, 0) AS Spain\n     , COALESCE(Sweden, 0) AS Sweden\n     , COALESCE(Switzerland, 0) AS Switzerland\n     , COALESCE(UK, 0) AS UK\n     , COALESCE(USA, 0) AS USA\n     , COALESCE(Venezuela, 0) AS Venezuela\n    FROM crosstab('SELECT quarter, country, num_of_orders \n    FROM myview5', \n    $$VALUES ('Argentina'::text), ('Austria'), ('Belgium'), ('Brazil'), ('Canada'), \n    ('Denmark'), ('Finland'), ('France'), ('Germany'), ('Ireland'), ('Italy'), \n    ('Mexico'), ('Norway'), ('Poland'), ('Portugal'), ('Spain'), ('Sweden'), \n    ('Switzerland'), ('UK'), ('USA'), ('Venezuela')$$ \n    ) \n    AS ct (quarter text, Argentina numeric, Austria numeric, Belgium numeric, \n    Brazil numeric, Canada numeric, Denmark numeric, Finland numeric, France numeric, \n    Germany numeric, Ireland numeric, Italy numeric, Mexico numeric, Norway numeric, \n    Poland numeric, Portugal numeric, Spain numeric, Sweden numeric, \n    Switzerland numeric, UK numeric, USA numeric, Venezuela numeric );",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Number of orders by country per quarter",
+      "type": "table"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 39,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "2021-06-03T22:57:47.484Z",
+    "to": "2023-02-01T05:00:00.000Z"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Data analysis with Python and SQL",
+  "uid": "de5p78dysmmm8f",
+  "version": 1,
+  "weekStart": ""
+}
