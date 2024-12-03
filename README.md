@@ -5,6 +5,6 @@ This project addresses the following 3 topics,
 * What are handy data analysis/engineering tools for Python developers;
 * How to build dashboard quickly and eaisly.
 
-<img src=./assets/grafana_dashboard1.png width="60%"/>
+<center><img src=./assets/grafana_dashboard1.png width="60%"/></center>
 
 By demostrate basic data analysis and data engineering cases, we get hand-on experience with popular libraries/tools, such as Pandas, Apache Spark/pyspark, Polars, PostgreSQL, Matplotlib, Seaborn and Grafana.
