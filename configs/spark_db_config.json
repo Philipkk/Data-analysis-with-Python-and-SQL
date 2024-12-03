@@ -1,0 +1,7 @@
+{
+"url": "jdbc:postgresql://localhost:5432/retailerdb",
+"dbtable": "information_schema.tables",
+"user": "user",
+"password": "password",
+"driver": "org.postgresql.Driver"
+}
