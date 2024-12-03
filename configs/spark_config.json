@@ -1,0 +1,5 @@
+{
+"spark.jars": "/path_to_jars/postgresql-42.7.4.jar,/path_to_jars/delta-spark_2.13-3.2.1.jar,/path_to_jars/delta-contribs_2.13-3.2.1.jar,/path_to_jars/delta-storage-3.2.1.jar",
+"spark.sql.extensions": "io.delta.sql.DeltaSparkSessionExtension",
+"spark.sql.catalog.spark_catalog": "org.apache.spark.sql.delta.catalog.DeltaCatalog"
+}
